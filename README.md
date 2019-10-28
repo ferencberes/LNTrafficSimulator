@@ -6,6 +6,8 @@ This repository contains the Lightning Network (LN) traffic simulator used in th
 
 In our work, we designed a traffic simulator to empirically study LN’s transaction fees and privacy provisions. The simulator relies only on publicly available data of the network structure and capacities, and generates transactions under assumptions that we validated based on information spread by  [blog posts](https://www.trustnodes.com/2019/08/20/guy-makes-20-a-month-for-locking-5-million-worth-of-bitcoin-on-the-lightning-network?fbclid=IwAR2-p8nWdg0ayO9S0Uz7qg3wmh_A8Wy6ueX8r3dLQvDTyJaj1ReSbYalnWI) of LN node owners.
 
+# Cite
+
 **A link for our pre-print paper will be published here in a few days.**
 
 # Data
@@ -24,10 +26,6 @@ After running the *download_data.sh* script three data files can be observed in 
 
 You can also download the compressed data file with this [link](https://dms.sztaki.hu/~fberes/ln/ln_data.zip).
 
-## Acknowledgements
-
-We are grateful to Antoine Le Calvez (Coinmetrics) and Altangent Labs for kindly providing us their edge stream data and daily graph snapshots.
-
 # Requirements
 
 - UNIX environment
@@ -39,18 +37,30 @@ We are grateful to Antoine Le Calvez (Coinmetrics) and Altangent Labs for kindly
 
 **You must download the data as described in the Data section to use our simulator!**
 
+### i.) Execution
+
 You can run our LN traffic simulator from the terminal:
 ```bash
 cd scripts
 python run_simulator.py
 ```
 
+**TODO: support execution with json snapshot file!!!**
+
 After execution you will find the output files in the *./script/trial/* folder.
 
-### Main simulator parameters:
+### ii.) Output files
+
+**TODO: explain the content of each simulator output files!!!**
+
+### iii.) Main parameters:
 
 - **experiment_id:** name of the output folder
 - **snapshot_id:** which snapshot to use for traffic simulation
 - **amount_sat:** the value of each simulated transaction in satoshis
 - **num_transactions:** the number of random transactions to sample
 - **eps**: ratio of merchants in the endpoints of the random transactions
+
+# Acknowledgements
+
+We are grateful to Antoine Le Calvez (Coinmetrics) and Altangent Labs for kindly providing us their edge stream data and daily graph snapshots.
