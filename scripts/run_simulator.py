@@ -32,7 +32,7 @@ edges = snapshots[snapshots["snapshot_id"]==snapshot_id]
 
 print("# 3. Simulation")
 
-simulator = ts.TransactionSimulator(edges, providers, amount_sat, num/mnt/idms/fberes/data/LNdata_transactions, drop_disabled=drop_disabled, drop_low_cap=drop_low_cap, eps=eps, with_depletion=with_depletion)
+simulator = ts.TransactionSimulator(edges, providers, amount_sat, num_transactions, drop_disabled=drop_disabled, drop_low_cap=drop_low_cap, eps=eps, with_depletion=with_depletion)
 transactions = simulator.transactions
 shortest_paths, alternative_paths, all_router_fees, _ = simulator.simulate(weight="total_fee", with_node_removals=find_alternative_paths)
 total_income, total_fee = simulator.export(output_dir)
