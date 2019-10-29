@@ -2,10 +2,13 @@ import networkx as nx
 import pandas as pd
 import numpy as np
 
-def prepare_edges_for_simulation(edges, amount_sat, drop_disabled, drop_low_cap, time_window=None, ts_upper_bound=1553390858, verbose=True):
+def prepare_edges_for_simulation(edges, amount_sat, drop_disabled, drop_low_cap, time_window=None, ts_upper_bound=None, verbose=True):
     """Preprocess LN graph snapshot with different edge filters."""
     E = len(edges)
-    tmp_edges = edges[edges["last_update"] < ts_upper_bound]
+    if ts_upper_bound != None:
+        tmp_edges = edges[edges["last_update"] < ts_upper_bound].copy()
+    else:
+        tmp_edges = edges.copy()
     if verbose:
         print("Channel filter - invalid timestamp:", E - len(tmp_edges))
     # remove edges with capacity below threshold

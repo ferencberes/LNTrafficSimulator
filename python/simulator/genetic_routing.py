@@ -11,7 +11,7 @@ def populate_route(route, k, G, router_weights=None):
     target = route[-1].replace("_trg","")
     while len(path) < k+1:
         pos = np.random.choice(range(len(path)-1))
-        n1, n2 = path[pos], path[pos+1]#.replace("_trg","")
+        n1, n2 = path[pos], path[pos+1]
         # find common directed neighbor
         neigh = set(G.successors(n1)).intersection(set(G.predecessors(n2)))
         if target in neigh:

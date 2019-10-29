@@ -22,9 +22,9 @@ After running the *download_data.sh* script three data files can be observed in 
 
 | File | Simulator input? | Content |
 |     :---      |   :---:   |   :---   |
-| **ln_snapshot_directed_multi_edges.csv** | Yes | preprocessed LN snapshots in the form of a directed graph |
+| **ln_edges.csv** | Yes | preprocessed LN snapshots in the form of a directed graph |
 | **1ml_meta_data.csv** | Yes | merchant meta data that we downloaded from [1ml.com](https://1ml.com/) |
-| **sample.json** | Yes | sample json file containing a daily LN snapshot. It can be used as input to our traffic simulator but *it needs further preprocessing!* |
+| **sample.json** | Yes | sample json file containing a daily LN snapshot. It can be used as input to our traffic simulator but **it needs further preprocessing!** |
 | **ln.tsv** | No | edge stream data about LN channels |
 
 You can also download the compressed data file with this [link](https://dms.sztaki.hu/~fberes/ln/ln_data_2019-10-29.zip).
@@ -46,11 +46,11 @@ You can also download the compressed data file with this [link](https://dms.szta
 |     :---      |   :---   |
 | `amount_sat` |  value of each simulated transaction in satoshis  |
 | `num_transactions`  | number of random transactions to sample  |
-| `eps` |  ratio of merchants in the endpoints of the random transactions  |
+| `eps` |  ratio of merchants among transactions endpoints  |
 | `drop_disabled` | drop temporarily disabled channels |
 | `drop_low_cap` | drop channels with capacity less than `amount_sat` |
-| `with_depletion` | the available channel capacity is maintained for each endpoint |
-| `find_alternative_paths` | execute base fee optimization step. **Note:** runtime decreases significantly if this step is disabled! |
+| `with_depletion` | the available channel capacity is maintained for both endpoints |
+| `find_alternative_paths` | execute base fee optimization. **Note:** runtime decreases significantly if this step is disabled! |
 
 You can set the value of these parameters in the simulator [script](scripts/run_simulator.py).
 

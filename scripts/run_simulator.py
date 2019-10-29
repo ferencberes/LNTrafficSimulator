@@ -44,7 +44,7 @@ if __name__ == "__main__":
             directed_edges = preprocess_json_file(json_file)
         elif input_type == "preprocessed":
             snapshot_id = int(sys.argv[2])
-            snapshots = pd.read_csv("%s/ln_snapshot_directed_multi_edges.csv" % data_dir)
+            snapshots = pd.read_csv("%s/ln_edges.csv" % data_dir)
             directed_edges = snapshots[snapshots["snapshot_id"]==snapshot_id]
         else:
             raise ValueError("The first arguments must be 'raw' or 'preprocessed'!")
