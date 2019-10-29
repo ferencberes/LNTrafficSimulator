@@ -20,10 +20,12 @@ ls ln_data
 ```
 After running the *download_data.sh* script three data files can be observed in the *ln_data* folder:
 
-- **ln_snapshot_directed_multi_edges.csv:** preprocessed LN snapshots in the form of a directed graph (simulator input file)
-- **1ml_meta_data.csv** merchant meta data that we downloaded from [1ml.com](https://1ml.com/) (simulator input file)
-- **ln.tsv:** edge stream data about LN channels
-- **sample.json:** sample json file containing a daily LN snapshot. It can be used as input to our traffic simulator but *it needs further preprocessing!*
+| File | Simulator input? | Content |
+|     :---      |   :---:   |   :---   |
+| **ln_snapshot_directed_multi_edges.csv** | Yes | preprocessed LN snapshots in the form of a directed graph |
+| **1ml_meta_data.csv** | Yes | merchant meta data that we downloaded from [1ml.com](https://1ml.com/) |
+| **sample.json** | Yes | sample json file containing a daily LN snapshot. It can be used as input to our traffic simulator but *it needs further preprocessing!* |
+| **ln.tsv** | No | edge stream data about LN channels |
 
 You can also download the compressed data file with this [link](https://dms.sztaki.hu/~fberes/ln/ln_data_2019-10-29.zip).
 
@@ -41,7 +43,7 @@ You can also download the compressed data file with this [link](https://dms.szta
 ## i.) Parameters:
 
 | Parameter | Description |
-|     :---:      |   :---   |
+|     :---      |   :---   |
 | `amount_sat` |  value of each simulated transaction in satoshis  |
 | `num_transactions`  | number of random transactions to sample  |
 | `eps` |  ratio of merchants in the endpoints of the random transactions  |
@@ -82,7 +84,7 @@ python run_simulator.py raw ../ln_data/sample.json YOUR_OUTPUT_DIR
 After execution you will find the output files in the provided YOUR_OUTPUT_DIR folder. The content of these files are as follows:
 
 | File | Content |
-|     :---:      |   :---   |
+|     :---      |   :---   |
 | params.json | Traffic simulator parameter values |
 | lengths_distrib.csv | Length distribution of simulated transactions. **Note:** the length is marked -1 if the payment failed (there was no available path for routing) |
 | router_incomes.csv | Contains the total routing income (satoshi) and number of routed payments for LN nodes in the simulation |
