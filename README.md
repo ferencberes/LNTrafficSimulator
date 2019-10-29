@@ -57,13 +57,13 @@ You can set the value of these parameters in the simulator [script](scripts/run_
 
 ## ii.) Execution
 
-You can run our LN traffic simulator in two different settings. 
+You can run our LN traffic simulator with two different settings. 
 
-If you have **multiple CPUs** at your disposal then we recommend setting a higher value of *max_threads* in the simulator [script](scripts/run_simulator.py).
+If you have **multiple CPUs** at your disposal then we recommend setting a higher value for  the *max_threads* parameter in the simulator [script](scripts/run_simulator.py).
 
 ### a.) Load data from preprocessed file
 
-The default input format of the simulator is a directed graph representation of LN snapshots. In this case you must provide the *snapshot_id* (e.g. 0) and the output folder as parameters.
+The default input format of the simulator is a directed graph representation of LN snapshots. In this case you must provide the *snapshot_id* (e.g. 0) and the *output folder* as parameters.
 
 ```bash
 cd scripts
@@ -88,7 +88,7 @@ After execution you will find the output files in the provided YOUR_OUTPUT_DIR f
 | params.json | Traffic simulator parameter values |
 | lengths_distrib.csv | Length distribution of simulated transactions. **Note:** the length is marked -1 if the payment failed (there was no available path for routing) |
 | router_incomes.csv | Contains the total routing income (satoshi) and number of routed payments for LN nodes in the simulation |
-| source_fees.csv | Contains the mean transaction costs (satoshi) and number of sent payments for transaction initiators nodes |
+| source_fees.csv | Contains the mean transaction costs (satoshi) and number of sent payments for transaction initiator nodes |
 | opt_fees.csv | For each router the estimated optimal increase in base fee (`opt_delta`) and gain in daily routing income (`income_diff`) is shown along with several other statistics |
 
 

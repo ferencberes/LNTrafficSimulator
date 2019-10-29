@@ -7,15 +7,15 @@ import simulator.transaction_simulator as ts
 data_dir = "../ln_data/"
 max_threads = 2
 
-def run_experiment(edges, output_dir):
-    amount_sat = 60000
-    num_transactions = 7000
-    eps = 0.8
-    drop_disabled = True
-    drop_low_cap = True
-    with_depletion = True
-    find_alternative_paths = True
+amount_sat = 60000
+num_transactions = 7000
+eps = 0.8
+drop_disabled = True
+drop_low_cap = True
+with_depletion = True
+find_alternative_paths = True
 
+def run_experiment(edges, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
