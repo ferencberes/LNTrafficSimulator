@@ -1,2 +1,4 @@
 *.ipynb_checkpoints/
 *.pyc
+*.zip
+ln_data/

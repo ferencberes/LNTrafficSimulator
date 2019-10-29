@@ -1,4 +1,4 @@
-﻿# LNTrafficSimulator
+# LNTrafficSimulator
 
 This repository contains the Lightning Network (LN) traffic simulator used in the cryptoeconomic research of [Ferenc Béres](https://github.com/ferencberes), [István András Seres](https://github.com/seresistvanandras) and András A. Benczúr.
 
@@ -23,43 +23,75 @@ After running the *download_data.sh* script three data files can be observed in 
 - **ln_snapshot_directed_multi_edges.csv:** preprocessed LN snapshots in the form of a directed graph (simulator input file)
 - **1ml_meta_data.csv** merchant meta data that we downloaded from [1ml.com](https://1ml.com/) (simulator input file)
 - **ln.tsv:** edge stream data about LN channels
+- **sample.json:** sample json file containing a daily LN snapshot. It can be used as input to our traffic simulator but *it needs further preprocessing!*
 
-You can also download the compressed data file with this [link](https://dms.sztaki.hu/~fberes/ln/ln_data.zip).
+You can also download the compressed data file with this [link](https://dms.sztaki.hu/~fberes/ln/ln_data_2019-10-29.zip).
 
 # Requirements
 
 - UNIX environment
 - **Python 3.5** conda environment with the following packages installed:
-    - pandas, numpy, networkx, matplotlib
-    - sys, os, json, copy, tqdm, collections 
+    - **data processing:** pandas, numpy, networkx, matplotlib
+    - **general:** sys, os, json, copy, tqdm, collections, functools, concurrent 
 
 # Usage
 
 **You must download the data as described in the Data section to use our simulator!**
 
-### i.) Execution
+## i.) Parameters:
 
-You can run our LN traffic simulator from the terminal:
+| Parameter | Description |
+|     :---:      |   :---   |
+| `amount_sat` |  value of each simulated transaction in satoshis  |
+| `num_transactions`  | number of random transactions to sample  |
+| `eps` |  ratio of merchants in the endpoints of the random transactions  |
+| `drop_disabled` | drop temporarily disabled channels |
+| `drop_low_cap` | drop channels with capacity less than `amount_sat` |
+| `with_depletion` | the available channel capacity is maintained for each endpoint |
+| `find_alternative_paths` | execute base fee optimization step. **Note:** runtime decreases significantly if this step is disabled! |
+
+You can set the value of these parameters in the simulator [script](scripts/run_simulator.py).
+
+
+## ii.) Execution
+
+You can run our LN traffic simulator in two different settings. 
+
+If you have **multiple CPUs** at your disposal then we recommend setting a higher value of *max_threads* in the simulator [script](scripts/run_simulator.py).
+
+### a.) Load data from preprocessed file
+
+The default input format of the simulator is a directed graph representation of LN snapshots. In this case you must provide the *snapshot_id* (e.g. 0) and the output folder as parameters.
+
 ```bash
 cd scripts
-python run_simulator.py
+python run_simulator.py preprocessed 0 YOUR_OUTPUT_DIR
 ```
 
-**TODO: support execution with json snapshot file!!!**
+### b.) Load data from json file
 
-After execution you will find the output files in the *./script/trial/* folder.
+You can execute the simulator on custom data as well, by providing daily LN snapshot as a json file (e.g. [lnd](https://graph.lndexplorer.com/api/graph)). See the example below:
 
-### ii.) Output files
+```bash
+cd scripts
+python run_simulator.py raw ../ln_data/sample.json YOUR_OUTPUT_DIR
+```
 
-**TODO: explain the content of each simulator output files!!!**
+## iii.) Output
 
-### iii.) Main parameters:
+After execution you will find the output files in the provided YOUR_OUTPUT_DIR folder. The content of these files are as follows:
 
-- **experiment_id:** name of the output folder
-- **snapshot_id:** which snapshot to use for traffic simulation
-- **amount_sat:** the value of each simulated transaction in satoshis
-- **num_transactions:** the number of random transactions to sample
-- **eps**: ratio of merchants in the endpoints of the random transactions
+| File | Content |
+|     :---:      |   :---   |
+| params.json | Traffic simulator parameter values |
+| lengths_distrib.csv | Length distribution of simulated transactions. **Note:** the length is marked -1 if the payment failed (there was no available path for routing) |
+| router_incomes.csv | Contains the total routing income (satoshi) and number of routed payments for LN nodes in the simulation |
+| source_fees.csv | Contains the mean transaction costs (satoshi) and number of sent payments for transaction initiators nodes |
+| opt_fees.csv | For each router the estimated optimal increase in base fee (`opt_delta`) and gain in daily routing income (`income_diff`) is shown along with several other statistics |
+
+
+**In order to get stable daily LN node statistics, we recommend to run the simulator for multiple times over several consecutive snapshots!**
+
 
 # Acknowledgements
 

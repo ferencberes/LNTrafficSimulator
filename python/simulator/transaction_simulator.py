@@ -1,8 +1,10 @@
+import sys, os, json
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-import sys, os, json
+import functools
+import concurrent.futures
 
 from .transaction_sampling import sample_transactions
 from .graph_preprocessing import *
@@ -18,11 +20,8 @@ def shortest_paths_with_exclusion(capacity_map, G, cost_prefix, weight, hash_buc
     new_paths["node"] = node
     return new_paths
 
-import functools
-import concurrent.futures
-
 def get_shortest_paths_with_node_removals(capacity_map, G, hashed_transactions, cost_prefix="", weight=None, threads=4):
-    print(threads)
+    print("Parallel execution on %i threads in progress.." % threads)
     if threads > 1:
         f_partial = functools.partial(shortest_paths_with_exclusion, capacity_map, G, cost_prefix, weight)
         executor = concurrent.futures.ProcessPoolExecutor(threads)
@@ -54,7 +53,7 @@ class TransactionSimulator():
             "active_ratio":active_ratio
         }
     
-    def simulate(self, weight=None, with_node_removals=True, max_threads=8, excluded=[], required_length=None):
+    def simulate(self, weight=None, with_node_removals=True, max_threads=2, excluded=[], required_length=None):
         if self.with_depletion:
             current_capacity_map, edges_with_capacity = init_capacities(self.edges, self.transactions, self.amount)
             G = generate_graph_for_path_search(edges_with_capacity, self.transactions, self.amount)
@@ -128,39 +127,6 @@ def get_total_fee_for_sources(transactions, shortest_paths):
     agg_funcs = dict(original_cost='mean', transaction_id='count')
     aggs = trans_with_costs.groupby(by="source")["original_cost"].agg(agg_funcs).rename({"original_cost":"mean_fee","transaction_id":"num_trans"}, axis=1)
     return aggs
-"""
-def calculate_node_influence(shortest_paths, alternative_paths):
-    s_paths = shortest_paths.copy().drop("path", axis=1)
-    a_paths = alternative_paths.copy().drop("path", axis=1)
-    s_paths["original_cost"] = 1.0 / (1.0 + s_paths["original_cost"])
-    a_paths["cost"] = 1.0 / (1.0 + a_paths["cost"])
-    routing_diff = a_paths.merge(s_paths, on="transaction_id", how="left", suffixes=("","_original"))
-    routing_diff = routing_diff.fillna(0.0)
-    harmonic_sums = routing_diff.drop("transaction_id", axis=1).groupby(by="node").aggregate({"cost":"sum","original_cost":"sum"})
-    harmonic_sums["cost_diff"] = harmonic_sums["original_cost"] - harmonic_sums["cost"]
-    return harmonic_sums.sort_values("cost_diff", ascending=False), routing_diff
-
-def aggregate_samples(experiment_files, snapshot_id):
-    samples = []
-    for i, f in enumerate(experiment_files[snapshot_id]):
-        df = pd.read_csv(f)
-        df = df.replace([np.inf, -np.inf], np.nan)
-        df = df[~df["cost_diff"].isnull()]
-        df["sample_id"] = i
-        samples.append(df)
-    df = pd.concat(samples, sort=True)
-    mean_costs = df.groupby("node").mean().drop("sample_id", axis=1)
-    return merge_with_other_metrics(mean_costs.sort_values("cost_diff", ascending=False), snapshot_id), df
-
-def merge_with_other_metrics(mean_costs, snapshot_id, weight=None):
-    cent = pd.read_csv("/mnt/idms/fberes/data/bitcoin_ln_research/centrality_scores/scores_%s_%i.csv" % (weight, snapshot_id))
-    most_pop = pd.read_csv("/mnt/idms/fberes/data/bitcoin_ln_research/most_pop_nodes.csv")
-    all_info = mean_costs.reset_index().merge(cent[["index","betw","deg","pr"]], left_on="node", right_on="index", how="left").drop("index", axis=1)
-    all_info = all_info.merge(most_pop[["index",str(snapshot_id)]], left_on="node", right_on="index", how="left").drop("index", axis=1)
-    all_info = all_info.rename({str(snapshot_id):"pop"}, axis=1)
-    all_info = all_info.fillna(0)
-    return all_info
-"""
 
 ### optimal fee pricing ###
 
@@ -212,10 +178,8 @@ def calc_optimal_base_fee(shortest_paths, alternative_paths, all_router_fees):
     valid_sp = shortest_paths[shortest_paths["length"]>1]
     # drop failed alternative paths
     p_altered = alternative_paths[~alternative_paths["cost"].isnull()]
-    #print("Path ratio that have alternative routing after removals: %f" % (len(p_altered) / len(alternative_paths)))
     num_routers = len(alternative_paths["node"].unique())
     num_routers_with_alternative_paths = len(p_altered["node"].unique())
-    #print("Node ratio that have alternative routing after removals: %f" % (num_routers_with_alternative_paths / num_routers))
     routers = list(p_altered["node"].unique())
     opt_strategy = []
     for n in tqdm(routers, mininterval=5):
@@ -225,11 +189,10 @@ def calc_optimal_base_fee(shortest_paths, alternative_paths, all_router_fees):
     total_income = get_total_income_for_routers(all_router_fees).rename({"fee":"total_income","num_trans":"total_traffic"}, axis=1)
     merged_infos = total_income.merge(opt_fees_df, on="node", how="outer")
     merged_infos = merged_infos.sort_values("total_income", ascending=False)
-    print(merged_infos.isnull().sum() / len(merged_infos))
     merged_infos = merged_infos.fillna(0.0)
     merged_infos["failed_traffic"] = merged_infos["total_traffic"] - merged_infos["alt_traffic"]
     merged_infos["failed_traffic_ratio"] = merged_infos["failed_traffic"] / merged_infos["total_traffic"]
     merged_infos["failed_income_ratio"] = (merged_infos["total_income"] - merged_infos["alt_income"]) / merged_infos["total_income"]
     merged_infos["income_diff"] = merged_infos.apply(lambda x: x["opt_income"] - x["alt_income"] +  x["failed_traffic"] * x["opt_delta"], axis=1)
-    print(merged_infos.drop("node", axis=1).mean())
+    #print(merged_infos.drop("node", axis=1).mean())
     return merged_infos, p_altered
