@@ -2,7 +2,7 @@
 
 In order to get stable daily LN node statistics, we recommend to run the simulator for multiple times over several consecutive snapshots. **Node statistics in each output file below are restricted to a single traffic simulator experiment!**
 
-## lengths_distrib.cs
+## lengths_distrib.csv
 
 Distribution of payment path length for the sampled transactions. Due to the source routing nature of LN, we assumed that transactions are executed on the cheapest path between the sender and the recipient.
 
