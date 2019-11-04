@@ -7,7 +7,7 @@ def sample_providers(node_variables, K, providers):
     probas = list(provider_records["degree"] / provider_records["degree"].sum())
     return np.random.choice(nodes, size=K, replace=True, p=probas)
 
-def sample_transactions(node_variables, amount_in_satoshi, K, eps, active_providers):
+def sample_transactions(node_variables, amount_in_satoshi, K, eps, active_providers, verbose=False):
     nodes = list(node_variables["pub_key"])
     src_selected = np.random.choice(nodes, size=K, replace=True)
     if eps > 0:
@@ -22,6 +22,7 @@ def sample_transactions(node_variables, amount_in_satoshi, K, eps, active_provid
     transactions["amount_SAT"] = amount_in_satoshi
     transactions["transaction_id"] = transactions.index
     transactions = transactions[transactions["source"] != transactions["target"]]
-    print("Number of loop transactions (removed):", K-len(transactions))
-    print("Provider target ratio:", len(transactions[transactions["target"].isin(active_providers)]) / len(transactions))
+    if verbose:
+        print("Number of loop transactions (removed):", K-len(transactions))
+        print("Merchant target ratio:", len(transactions[transactions["target"].isin(active_providers)]) / len(transactions))
     return transactions[["transaction_id","source","target","amount_SAT"]]

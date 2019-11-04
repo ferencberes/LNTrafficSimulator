@@ -83,7 +83,7 @@ def calculate_tx_fee(df, amount_sat):
     # second part: milli_msat == 10^-6 sat : fee_rate_milli_msat -> fee_rate_sat
     return df["fee_base_msat"] / 1000.0 + amount_sat * df["fee_rate_milli_msat"] / 10.0**6
 
-def init_capacities(edges, transactions, amount_sat):
+def init_capacities(edges, transactions, amount_sat, verbose=False):
     """Initialize capacity map for path search"""
     tx_targets = set(transactions["target"])
     # init capacity dict
@@ -100,7 +100,8 @@ def init_capacities(edges, transactions, amount_sat):
         else:
             channels.add((s,t))
     edges_with_capacity = populate_capacities(channels, capacity_map, amount_sat)
-    print("Edges with capacity: %i->%i" % (len(edges),len(edges_with_capacity))) 
+    if verbose:
+        print("Edges with capacity: %i->%i" % (len(edges),len(edges_with_capacity))) 
     return capacity_map, edges_with_capacity
     
 def populate_capacities(channels, capacity_map, amount_sat):
