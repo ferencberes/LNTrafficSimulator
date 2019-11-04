@@ -6,19 +6,50 @@ This repository contains the Lightning Network (LN) traffic simulator used in th
 
 In our work, we designed a traffic simulator to empirically study LN’s transaction fees and privacy provisions. The simulator relies only on publicly available data of the network structure and capacities, and generates transactions under assumptions that we validated based on information spread by  [blog posts](https://www.trustnodes.com/2019/08/20/guy-makes-20-a-month-for-locking-5-million-worth-of-bitcoin-on-the-lightning-network?fbclid=IwAR2-p8nWdg0ayO9S0Uz7qg3wmh_A8Wy6ueX8r3dLQvDTyJaj1ReSbYalnWI) of LN node owners.
 
+# What's in it for me?
+We think that our simulator can be of interest mainly for two types of people: LN node owners and researchers. Hence, the simulator can answer the following questions of interest for these people:
+
+## i.) LN node owners, routers:
+- What is the optimal fee I could charge for transactions going through my node in order to maximise my routing profits?
+- What is my expected income from routing with respect to certain parameters (topology, traffic, transacted amounts)?
+- How various parameters (topology, traffic, transacted amounts) affect the profitability of my nodes?
+
+## ii.) Researchers:
+- What is the optimal fee nodes can charge? How far is it (if at all) from on-chain fees?  
+- What is the path length distribution of transactions on the LN graph? How much anonymity do they provide? 
+- How profitable is it to run a router node? Who are the most profitable ones?
+- Is everyone altruistic on the LN transaction fee market?
+- How various parameters (topology, traffic, transacted amounts) affect the profitability of each node?
+
 # Cite
 
 **A link for our pre-print paper will be published here in a few days.**
 
+
+# Requirements
+
+- UNIX or macOS environment
+    - For macOS users: you need to have wget (brew install wget) 
+- **Python 3.5** conda environment with the following packages installed:
+    - **data processing:** pandas, numpy, networkx, matplotlib
+    - **general:** sys, os, json, copy, tqdm, collections, functools, concurrent
+
 # Data
 
-By providing daily LN snapshots as input, our simulator models the flow of daily transactions. You can download the data files, that we used in our research by executing the following command:
+By providing daily LN snapshots as input **(you can bring and use your own!)**, our simulator models the flow of daily transactions. You can download the data files, that we used in our research by executing the following command:
 
+## Linux
 ```bash
 bash ./scripts/download_data.sh
 ls ln_data
 ```
-After running the *download_data.sh* script three data files can be observed in the *ln_data* folder:
+## macOS
+```bash
+sh ./scripts/download_data.sh
+ls ln_data
+```
+
+After running the *download_data.sh* script 4 data files can be observed in the *ln_data* folder:
 
 | File | Simulator input? | Content |
 |     :---      |   :---:   |   :---   |
@@ -29,12 +60,6 @@ After running the *download_data.sh* script three data files can be observed in 
 
 You can also download the compressed data file with this [link](https://dms.sztaki.hu/~fberes/ln/ln_data_2019-10-29.zip).
 
-# Requirements
-
-- UNIX environment
-- **Python 3.5** conda environment with the following packages installed:
-    - **data processing:** pandas, numpy, networkx, matplotlib
-    - **general:** sys, os, json, copy, tqdm, collections, functools, concurrent 
 
 # Usage
 
