@@ -121,7 +121,7 @@ After execution you will find the output files in the provided YOUR_OUTPUT_DIR f
 | source_fees.csv | Contains the mean transaction costs (satoshi) and the  number of sent payments for transaction initiator nodes |
 | opt_fees.csv | For each router the estimated optimal increase in base fee  and gain in daily routing income is presented |
 
-We provide detailed information on the output files [here](scripts/output.md).
+We provide detailed information on the output files [here](scripts/README.md).
 
 **In order to get stable daily LN node statistics, we recommend to run the simulator for multiple times over several consecutive snapshots!**
 
