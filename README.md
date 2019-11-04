@@ -83,13 +83,9 @@ You can also download the compressed data file with this [link](https://dms.szta
 
 You can set the value of these parameters in a JSON [configuration file](scripts/params.json).
 
-**Note:** runtime decreases significantly you set `find_alternative_paths=False` in this [script](scripts/run_simulator.py). In this case base fee optimization is not executed.
-
 ## ii.) Execution
 
 You can run our LN traffic simulator with two different settings. 
-
-If you have **multiple CPUs** at your disposal then we recommend setting a higher value for  the *max_threads* parameter in the simulator [script](scripts/run_simulator.py).
 
 ### a.) Load data from preprocessed file
 
@@ -108,6 +104,10 @@ You can execute the simulator on custom data as well, by providing daily LN snap
 cd scripts
 python run_simulator.py raw ../ln_data/sample.json params.json YOUR_OUTPUT_DIR
 ```
+
+**Note:** If you have **multiple CPUs** at your disposal then we recommend setting a higher value for the `max_threads` parameter in the simulator [script](scripts/run_simulator.py).
+
+**Note:** runtime decreases significantly if you set `find_alternative_paths=False` in the simulator [script](scripts/run_simulator.py). In this case base fee optimization is not executed.
 
 ## iii.) Output
 
