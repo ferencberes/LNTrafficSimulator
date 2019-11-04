@@ -78,12 +78,12 @@ You can also download the compressed data file with this [link](https://dms.szta
 | `count`  | number of random transactions to sample  |
 | `epsilon` |  ratio of merchants among transactions endpoints  |
 | `drop_disabled` | drop temporarily disabled channels |
-| `drop_low_cap` | drop channels with capacity less than `amount_sat` |
+| `drop_low_cap` | drop channels with capacity less than `amount` |
 | `with_depletion` | the available channel capacity is maintained for both endpoints |
-| `find_alternative_paths` | execute base fee optimization. **Note:** runtime decreases significantly if this step is disabled! |
 
 You can set the value of these parameters in a JSON [configuration file](scripts/params.json).
 
+**Note:** runtime decreases significantly you set `find_alternative_paths=False` in this [script](scripts/run_simulator.py). In this case base fee optimization is not executed.
 
 ## ii.) Execution
 
@@ -91,7 +91,7 @@ You can run our LN traffic simulator with two different settings.
 
 If you have **multiple CPUs** at your disposal then we recommend setting a higher value for  the *max_threads* parameter in the simulator [script](scripts/run_simulator.py).
 
-#### a.) Load data from preprocessed file
+### a.) Load data from preprocessed file
 
 The default input format of the simulator is a directed graph representation of LN snapshots. In this case you must provide the *snapshot_id* (e.g. 0) and the *output folder* as parameters.
 
@@ -100,7 +100,7 @@ cd scripts
 python run_simulator.py preprocessed 0 params.json YOUR_OUTPUT_DIR
 ```
 
-#### b.) Load data from (custom) JSON file
+### b.) Load data from (custom) JSON file
 
 You can execute the simulator on custom data as well, by providing daily LN snapshot as a JSON file (e.g. [lnd](https://graph.lndexplorer.com/api/graph)). See the example below:
 
