@@ -128,4 +128,4 @@ We provide detailed information on the output files [here](scripts/README.md).
 
 # Acknowledgements
 
-We are grateful to Antoine Le Calvez (Coinmetrics) and Altangent Labs for kindly providing us their edge stream data and daily graph snapshots.
+We are grateful to Antoine Le Calvez (Coinmetrics) and Altangent Labs for kindly providing us their edge stream data and daily graph snapshots. We are thankful to [Domokos M. Kelen](https://github.com/proto-n) and [Rene Pickhardt](https://github.com/renepickhardt) for insightful discussions.
