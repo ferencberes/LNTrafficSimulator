@@ -8,7 +8,14 @@ In our work, we designed a traffic simulator to empirically study LN’s transac
 
 ## Cite
 
-**A link for our pre-print paper will be published here in a few days.**
+You can find our pre-print [paper](https://arxiv.org/abs/1911.09432) on arXiv. Please cite our work if you use our traffic simulator or the LN data that we provided. 
+
+@article{beres2019cryptoeconomic,
+  title={A Cryptoeconomic Traffic Analysis of Bitcoin's Lightning Network},
+  author={B\'eres, Ferenc and  Seres, Istv{\'a}n Andr{\'a}s and Bencz\'ur, Andr{\'a}s A.},
+  journal={arXiv preprint arXiv:1911.09432},
+  year={2019}
+}
 
 # What's in it for me?
 We think that our simulator can be of interest mainly for two types of people: LN node owners and researchers. Hence, the simulator can answer the following questions of interest for these people:
