@@ -42,6 +42,17 @@ We think that our simulator can be of interest mainly for two types of people: L
     - **data processing:** pandas, numpy, networkx, matplotlib
     - **general:** sys, os, json, copy, tqdm, collections, functools, concurrent
 
+# Installation
+
+After cloning the repository you can install the simulator with `pip`.
+
+```bash
+git clone https://github.com/ferencberes/LNTrafficSimulator.git
+cd LNTrafficSimulator
+git checkout sandbox
+pip install .
+```
+
 # Data
 
 By providing daily LN snapshots as input **(you can bring and use your own!)**, our simulator models the flow of daily transactions. 

@@ -1,8 +1,7 @@
 import pandas as pd
-import os, sys, json
-sys.path.insert(0,"../python/")
-from ln_utils import preprocess_json_file
-import simulator.transaction_simulator as ts
+import sys, os, json
+from lnsimulator.ln_utils import preprocess_json_file
+import lnsimulator.simulator.transaction_simulator as ts
 
 data_dir = "../ln_data/"
 max_threads = 2
