@@ -51,13 +51,19 @@ class TransactionSimulator():
             "time_window":time_window
         }
     
-    def simulate(self, weight=None, with_node_removals=True, max_threads=2, excluded=[], required_length=None):
+    def simulate(self, weight=None, with_node_removals=True, max_threads=2, excluded=[], required_length=None, cap_change_nodes=[], capacity_fraction=1.0):
+        edges_tmp = self.edges.copy()
+        if len(cap_change_nodes) > 0 and capacity_fraction < 1.0:
+            filt = edges_tmp["src"].isin(cap_change_nodes) | edges_tmp["trg"].isin(cap_change_nodes)
+            edges_tmp.loc[filt,"capacity"] *= capacity_fraction
+            edges_tmp = edges_tmp[edges_tmp["capacity"] >= self.amount]
+            print("Capacity change executed: (%s, %.4f)" % (str(cap_change_nodes), capacity_fraction))
         if self.with_depletion:
-            current_capacity_map, edges_with_capacity = init_capacities(self.edges, self.transactions, self.amount, self.verbose)
+            current_capacity_map, edges_with_capacity = init_capacities(edges_tmp, self.transactions, self.amount, self.verbose)
             G = generate_graph_for_path_search(edges_with_capacity, self.transactions, self.amount)
         else:
             current_capacity_map = None
-            G = generate_graph_for_path_search(self.edges, self.transactions, self.amount)
+            G = generate_graph_for_path_search(edges_tmp, self.transactions, self.amount)
         if len(excluded) > 0:
             print(G.number_of_edges(), G.number_of_nodes())
             for node in excluded:
