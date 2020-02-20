@@ -49,7 +49,6 @@ After cloning the repository you can install the simulator with `pip`.
 ```bash
 git clone https://github.com/ferencberes/LNTrafficSimulator.git
 cd LNTrafficSimulator
-git checkout sandbox
 pip install .
 ```
 
