@@ -13,8 +13,5 @@ setup(name='lnsimulator',
           "networkx",
           "matplotlib",
           "tqdm",
-          "sphinx",
-          "sphinx_markdown_tables",
-          "recommonmark"
       ],
 zip_safe=False)

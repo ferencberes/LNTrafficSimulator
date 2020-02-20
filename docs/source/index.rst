@@ -24,10 +24,12 @@ ii.) Researchers:
 *    Is everyone altruistic on the LN transaction fee market?
 *    How various parameters (topology, traffic, transacted amounts) affect the profitability of each node?
 
-Our research paper "A Cryptoeconomic Traffic Analysis of Bitcoin's Lightning Network" is available on `arXiv <https://arxiv.org/abs/1911.09432>`_.
+Our research paper **"A Cryptoeconomic Traffic Analysis of Bitcoin's Lightning Network"** is available on `arXiv <https://arxiv.org/abs/1911.09432>`_.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    getting_started
+   simulator_docs
+   acknowledgements
