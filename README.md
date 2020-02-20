@@ -1,6 +1,11 @@
 ﻿# LNTrafficSimulator
 
-This repository contains the Lightning Network (LN) traffic simulator used in the cryptoeconomic research of [Ferenc Béres](https://github.com/ferencberes), [István András Seres](https://github.com/seresistvanandras) and András A. Benczúr.
+[![Documentation Status](https://readthedocs.org/projects/lnsimulator/badge/?version=latest)](https://lnsimulator.readthedocs.io/en/latest/?badge=latest)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ferencberes/LNTrafficSimulator/master?filepath=notebooks%2FExamples.ipynb)
+
+This repository contains the Lightning Network (LN) traffic simulator used in the cryptoeconomic [research](https://arxiv.org/abs/1911.09432) of [Ferenc Béres](https://github.com/ferencberes), [István András Seres](https://github.com/seresistvanandras) and András A. Benczúr.
+
+**Detailed documentation:** https://lnsimulator.readthedocs.io/en/latest/
 
 # Introduction
 
