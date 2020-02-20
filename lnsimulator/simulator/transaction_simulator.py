@@ -127,8 +127,9 @@ def get_total_income_for_routers(all_router_fees):
 def get_total_fee_for_sources(transactions, shortest_paths):
     tmp_sp = shortest_paths[shortest_paths["length"]>0]
     trans_with_costs = transactions[["transaction_id","source"]].merge(tmp_sp[["transaction_id","original_cost"]], on="transaction_id", how="right")
-    agg_funcs = dict(original_cost='mean', transaction_id='count')
-    aggs = trans_with_costs.groupby(by="source")["original_cost"].agg(agg_funcs).rename({"original_cost":"mean_fee","transaction_id":"num_trans"}, axis=1)
+    #agg_funcs = dict(original_cost='mean', transaction_id='count')
+    agg_funcs = {"original_cost":'mean', "transaction_id":'count'}
+    aggs = trans_with_costs.groupby("source").agg(agg_funcs).rename({"original_cost":"mean_fee","transaction_id":"num_trans"}, axis=1)
     return aggs
 
 ### optimal fee pricing ###
