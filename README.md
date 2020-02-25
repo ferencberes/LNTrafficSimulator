@@ -1,9 +1,9 @@
-﻿# LNTrafficSimulator
+﻿# LNTrafficSimulator (lnsimulator package)
 
 [![Documentation Status](https://readthedocs.org/projects/lnsimulator/badge/?version=latest)](https://lnsimulator.readthedocs.io/en/latest/?badge=latest)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ferencberes/LNTrafficSimulator/master?filepath=notebooks%2FExamples.ipynb)
 
-This repository contains the Lightning Network (LN) traffic simulator used in the cryptoeconomic [research](https://arxiv.org/abs/1911.09432) of [Ferenc Béres](https://github.com/ferencberes), [István András Seres](https://github.com/seresistvanandras) and András A. Benczúr.
+The `lnsimulator` Python package contains the Lightning Network (LN) traffic simulator used in the cryptoeconomic [research](https://arxiv.org/abs/1911.09432) of [Ferenc Béres](https://github.com/ferencberes), [István András Seres](https://github.com/seresistvanandras) and András A. Benczúr. 
 
 **Detailed documentation:** https://lnsimulator.readthedocs.io/en/latest/
 
@@ -39,7 +39,7 @@ We think that our simulator can be of interest mainly for two types of people: L
 - Is everyone altruistic on the LN transaction fee market?
 - How various parameters (topology, traffic, transacted amounts) affect the profitability of each node?
 
-You can try our simulator online using [Binder](https://camo.githubusercontent.com/483bae47a175c24dfbfc57390edd8b6982ac5fb3/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667)
+**You can try our simulator in an online docker image using [Binder](https://camo.githubusercontent.com/483bae47a175c24dfbfc57390edd8b6982ac5fb3/68747470733a2f2f6d7962696e6465722e6f72672f62616467655f6c6f676f2e737667).** If you prefer installing the `lnsimulator` package in your local environment then please follow the instruction below or have a look at the [documentation](https://lnsimulator.readthedocs.io/en/latest/).
 
 # Requirements
 
