@@ -101,15 +101,68 @@ print("Succes rate with depletions:", sim_with_dep.transactions["success"].mean(
 print("Succes rate without depletions:", sim_wout_dep.transactions["success"].mean())
 ```
 
-# Other
+## Advanced simulation features
 
-## 1. Transaction fee optimization
+In the past experiment after initializing your simulator the `simulate()` function executed cheapest path routing by default without modifying the available channel data. Now let's see some additional use cases.
 
-## 2. Capacity optimization
+```
+sim = ts.TransactionSimulator(directed_edges, providers, amount, count)
+```
 
-## 3. Node removal
+### Routing algorithm
 
-## 4. Genetic payment routing
+For now you can choose between two routing algorithms by setting the `weight` parameter
 
+- **cheapest path** routing (`weight="total_fee"` - DEFAULT SETTING)
+- **shortest path** routing (`weight=None`)
 
+```
+shortest_paths, _, _, _ = sim.simulate(weight=None)
+cheapest_paths, _, _, _ = sim.simulate(weight="total_fee")
+```
 
+**Filter out payments that could not be routed (they are denoted with `length==-1`)**
+
+Then observe the average path length for the simulated payments
+
+```
+print(shortest_paths[shortest_paths["length"]>0]["length"].mean())
+print(cheapest_paths[cheapest_paths["length"]>0]["length"].mean())
+```
+
+### Node removal
+
+You can observe the effects of node removals as well by providing a list of LN node public keys. In this case every channel adjacent to the given nodes will be removed during payment simulation. 
+
+**In this example we exclude the top 5 nodes with highest routing income**
+
+```
+_, _, all_router_fees, _ = sim.simulate(weight="total_fee")
+print("Succes rate BEFORE exclusion:", sim.transactions["success"].mean())
+
+top_5_stats = all_router_fees.groupby("node")["fee"].sum().sort_values(ascending=False).head(5)
+print(top_5_stats)
+top_5_nodes = list(top_5_stats.index)
+```
+
+You can observe how the payment success rate dropped by removing 5 important routers
+
+```
+_, _, _, _ = sim.simulate(weight="total_fee", excluded=top_5_nodes)
+print("Succes rate AFTER exclusion:", sim.transactions["success"].mean())
+```
+
+### Node capacity reduction
+
+You can observe the traffic changes for a node by reducing its capacity to a given fraction of its original value. 
+
+**In this example we reduce capacity to 10% of the top 5 nodes with highest routing income. Then we compare their new income with the original.**
+
+```
+_, _, reduced_fees, _ = sim.simulate(weight="total_fee", cap_change_nodes=top_5_nodes, capacity_fraction=0.1)
+print("Succes rate AFTER capacity reduction:", sim.transactions["success"].mean())
+
+new_stats = reduced_fees.groupby("node")["fee"].sum()
+old_and_new = top_5_stats.reset_index().merge(new_stats.reset_index(), on="node", how="left", suffixes=("_old","_new"))
+print(old_and_new.fillna(0.0))
+```
