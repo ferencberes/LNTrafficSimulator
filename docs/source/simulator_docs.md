@@ -45,7 +45,7 @@ providers = list(node_meta["pub_key"])
 
 ## 2. Configuration
 
-First we give you the list of main parameters.
+First we give you the list of main parameters. **By the word "transaction" we refer to LN payments.**
 
 | Parameter | Description |
 |     :---      |   :---   |

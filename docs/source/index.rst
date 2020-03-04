@@ -32,4 +32,5 @@ Our research paper **"A Cryptoeconomic Traffic Analysis of Bitcoin's Lightning N
 
    getting_started
    simulator_docs
+   advanced_docs
    acknowledgements

@@ -34,24 +34,24 @@ def get_shortest_paths_with_node_removals(capacity_map, G, hashed_transactions, 
     return pd.concat(alternative_paths)
 
 class TransactionSimulator():
-    def __init__(self, edges, merchants, amount_sat, k, eps=0.8, drop_disabled=True, drop_low_cap=True, with_depletion=True, time_window=None, verbose=False):
+    def __init__(self, edges, merchants, amount_sat, count, epsilon=0.8, drop_disabled=True, drop_low_cap=True, with_depletion=True, time_window=None, verbose=False):
         self.verbose = verbose
         self.with_depletion = with_depletion
         self.amount = amount_sat
         self.edges = prepare_edges_for_simulation(edges, amount_sat, drop_disabled, drop_low_cap, time_window, verbose=self.verbose)
         self.node_variables, self.merchants, active_ratio = init_node_params(self.edges, merchants, verbose=self.verbose)
-        self.transactions = sample_transactions(self.node_variables, amount_sat, k, eps, self.merchants, verbose=self.verbose)
+        self.transactions = sample_transactions(self.node_variables, amount_sat, count, epsilon, self.merchants, verbose=self.verbose)
         self.params = {
             "amount":amount_sat,
-            "count":k,
-            "epsilon":eps,
+            "count":count,
+            "epsilon":epsilon,
             "with_depletion":with_depletion,
             "drop_disabled":drop_disabled,
             "drop_low_cap": drop_low_cap,
             "time_window":time_window
         }
     
-    def simulate(self, weight=None, with_node_removals=True, max_threads=2, excluded=[], required_length=None, cap_change_nodes=[], capacity_fraction=1.0):
+    def simulate(self, weight="total_fee", with_node_removals=False, max_threads=2, excluded=[], required_length=None, cap_change_nodes=[], capacity_fraction=1.0):
         edges_tmp = self.edges.copy()
         if len(cap_change_nodes) > 0 and capacity_fraction < 1.0:
             filt = edges_tmp["src"].isin(cap_change_nodes) | edges_tmp["trg"].isin(cap_change_nodes)
