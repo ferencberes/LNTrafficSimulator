@@ -45,9 +45,7 @@ We think that our simulator can be of interest mainly for two types of people: L
 
 - UNIX or macOS environment
     - For macOS users: you need to have wget (brew install wget) 
-- **Python 3.5** conda environment with the following packages installed:
-    - **data processing:** pandas, numpy, networkx, matplotlib
-    - **general:** sys, os, json, copy, tqdm, collections, functools, concurrent
+- This package was developed in Python 3.5 (conda environment) but it works with Python 3.6 and 3.7 as well.
 
 # Installation
 
