@@ -28,12 +28,12 @@ def run_experiment(edges, parameter_file, output_dir):
     providers = list(node_meta["pub_key"])
 
     print("\n# 4. Simulation")
-    simulator = ts.TransactionSimulator(edges, providers, amount, count, drop_disabled=drop_disabled, drop_low_cap=drop_low_cap, eps=epsilon, with_depletion=with_depletion)
+    simulator = ts.TransactionSimulator(edges, providers, amount, count, epsilon=epsilon, drop_disabled=drop_disabled, drop_low_cap=drop_low_cap, with_depletion=with_depletion)
     transactions = simulator.transactions
     shortest_paths, alternative_paths, all_router_fees, _ = simulator.simulate(weight="total_fee", with_node_removals=find_alternative_paths, max_threads=max_threads)
     total_income, total_fee = simulator.export(output_dir)
     
-    print("\n# 5. Analyze optimal routing fee for nodes")
+    print("\n# 5. Analyze optimal base fee for nodes")
     if find_alternative_paths:
         opt_fees_df, p_altered = ts.calc_optimal_base_fee(shortest_paths, alternative_paths, all_router_fees)
         opt_fees_df.to_csv("%s/opt_fees.csv" % output_dir, index=False)

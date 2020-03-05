@@ -12,6 +12,7 @@ setup(name='lnsimulator',
           "numpy",
           "networkx",
           "matplotlib",
+          "seaborn",
           "tqdm",
       ],
 zip_safe=False)
