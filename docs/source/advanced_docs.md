@@ -166,3 +166,76 @@ new_stats = reduced_fees.groupby("node")["fee"].sum()
 old_and_new = top_5_stats.reset_index().merge(new_stats.reset_index(), on="node", how="left", suffixes=("_old","_new"))
 print(old_and_new.fillna(0.0))
 ```
+
+## Longer path (genetic) routing
+
+In our [paper](https://arxiv.org/abs/1911.09432) we proposed a genetic algorithm to find cheap paths with at least a given length (`required_length` parameter). By default genetic routing is disabled (`required_length=None`). 
+
+**We note that..** 
+
+- using a higher value for `required_length` could increase the running time significantly.
+- payment paths with length 1 (direct channels) won't be forced to longer as with zero intermediary node there is no privacy issue here
+- if the genetic algorithm cannot find a path with the required length then it will return a path that is lower than this bound
+
+**In this example we will observe the path length distribution for different values of the `required_length` parameter**
+
+```
+sim_for_routing = ts.TransactionSimulator(directed_edges, providers, amount, count)
+
+min_path_l = [2,3,4]
+length_distrib_map = {}
+
+for length_value in min_path_l:
+    cheapest_paths, _, _, _ = sim.simulate(weight="total_fee", required_length=length_value)
+    length_distrib_map[length_value] = cheapest_paths["length"].value_counts()
+    print(length_value)
+```
+
+Observe the fraction of path with a given length (rows). The columns represent values of the `required_length` parameter. **The fraction of path in (3,3) and (4,4) cell of the heatmap are indeed high due to longer path routing.** We note that the row with index -1 represent the fraction of failed payments.
+
+```
+import seaborn as sns
+
+distrib_df = pd.DataFrame(length_distrib_map)
+distrib_df = distrib_df / distrib_df.sum()
+sns.heatmap(distrib_df.loc[[-1,1,2,3,4]], cmap="coolwarm", annot=True)
+```
+
+## Base fee optimization
+
+In the Lightning Network data that we observed more than 60\% of the nodes charged the default base fee. From a node's position in the network `lnsimulator` can estimate the base fee increment needed to achieve optimal routing by setting `with_node_removals=True` and calling `calc_optimal_base_fee` function afterwards. **For now optimal base fee search is enabled only for cheapest path routing (`weight="total_fee`). We also recommend you apply parallelization by setting a higher value for the `max_threads` parameter.**
+
+```
+sim_fee_opt = ts.TransactionSimulator(directed_edges, providers, amount, count)
+shortest_paths, alternative_paths, all_router_fees, _ = sim_fee_opt.simulate(weight="total_fee", with_node_removals=True, max_threads=2)
+opt_fee_df, _ = ts.calc_optimal_base_fee(shortest_paths, alternative_paths, all_router_fees)
+print(opt_fee_df.head())
+```
+
+The result of `calc_optimal_base_fee` contains the following informations.
+
+| Column | Description |
+|     :---      |   :---   |
+| node | LN node public key |
+| total_income | routing income |
+| total_traffic | number of routed transactions |
+| failed_traffic_ratio | ratio of failed transactions out of `total_traffic` payments if `node` is removed from LN  |
+| opt_delta | estimated optimal increase in base fee |
+| income_diff | estimated increase in daily routing income after applying optimal base fee increment |
+
+In the next step we transform the `opt_delta` column into a categorical feature that represent the increment magnitude.
+
+```
+def to_category(x):
+    if x > 100:
+        return 3
+    elif x > 10:
+        return 2
+    elif x > 0:
+        return 1
+    else:
+        return 0
+    
+print("The magnitude distribution of base fee increments:")
+print(opt_fee_df["opt_delta"].apply(to_category).value_counts())
+```
