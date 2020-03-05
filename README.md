@@ -1,5 +1,6 @@
 ﻿# LNTrafficSimulator (lnsimulator package)
 
+[![Build Status](https://travis-ci.com/ferencberes/LNTrafficSimulator.svg?branch=master)](https://travis-ci.com/ferencberes/LNTrafficSimulator)
 [![Documentation Status](https://readthedocs.org/projects/lnsimulator/badge/?version=latest)](https://lnsimulator.readthedocs.io/en/latest/?badge=latest)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ferencberes/LNTrafficSimulator/master?filepath=notebooks%2FExamples.ipynb)
 
