@@ -2,13 +2,13 @@
 
 By executing the steps below you can set up `lnsimulator` for your environment in a few minutes.
 
-## 1. Requirements
+## Requirements
 
 - UNIX or macOS environment
     - For macOS users: you need to have wget (brew install wget)
 - This package was developed in Python 3.5 (conda environment) but it works with Python 3.6 and 3.7 as well.
 
-## 2. Install
+## Install
 
 After cloning the [repository](https://github.com/ferencberes/LNTrafficSimulator) from GitHub you can install the simulator with `pip`.
 
@@ -18,7 +18,7 @@ cd LNTrafficSimulator
 pip install .
 ```
 
-## 3. Data
+## Data
 
 By providing daily LN snapshots as input **(you can bring and use your own!)**, our simulator models the flow of daily transactions.
 
@@ -50,7 +50,7 @@ The *download_data.sh* script downloads 4 data files into the *ln_data* folder w
 | **1ml_meta_data.csv** | Yes | merchant meta data that we downloaded from [1ml.com](https://1ml.com/) |
 | **ln.tsv** | No | edge stream data about LN channels |
 
-## 4. First example
+## First example
 
 Execute the following code to see whether your configuration was successful.
 

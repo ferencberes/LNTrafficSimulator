@@ -3,7 +3,7 @@
 In the steps below we suppose that you have already installed `lnsimulator` and downloaded the related LN data.
 If it is not the case then should follow the instructions in the [Getting Started](getting_started) section first.
 
-## 1. Prepare LN data
+## Prepare LN data
 
 In order to run the simulation you need to provide LN snapshots as well as information about merchants nodes.
 
@@ -43,7 +43,7 @@ node_meta = pd.read_csv("%s/1ml_meta_data.csv" % data_dir)
 providers = list(node_meta["pub_key"])
 ```
 
-## 2. Configuration
+## Configuration
 
 First we give you the list of main parameters. **By the word "transaction" we refer to LN payments.**
 
@@ -71,7 +71,7 @@ with_depletion = True
 simulator = ts.TransactionSimulator(directed_edges, providers, amount, count, drop_disabled=drop_disabled, drop_low_cap=drop_low_cap, eps=epsilon, with_depletion=with_depletion)
 ```
 
-## 3. Estimating daily income and traffic
+## Estimating daily income and traffic
 
 ### i.) Transactions
 
@@ -88,7 +88,7 @@ print(transactions.shape)
 In this step the simulator searches for cheapest payment paths from transaction senders to its receivers. Channel capacity changes are well maintained during the simulation. 
 
 ```python
-_, _, all_router_fees, _ = simulator.simulate(weight="total_fee", with_node_removals=False)
+cheapest_paths, _, all_router_fees, _ = simulator.simulate(weight="total_fee", with_node_removals=False)
 print(all_router_fees.head())
 ```
 
@@ -99,11 +99,89 @@ After payment simulation you can export the results as well as calculate traffic
 ```python
 output_dir = "test"
 total_income, total_fee = simulator.export(output_dir)
-
-total_income.set_index("node").head(10)
 ```
+
+In order to get stable daily LN node statistics, we recommend to run the simulator for multiple times over several consecutive snapshots. **Node statistics in each output file below are restricted to a single traffic simulator experiment!** You can find these file in the `output_dir` folder.
+
+#### a.) lengths_distrib.csv
+
+Distribution of payment path length for the sampled transactions. Due to the source routing nature of LN, we assumed that transactions are executed on the cheapest path between the sender and the recipient.
+
+| Column | Description |
+|     :---      |   :---   |
+| First | Payment path length |
+| Second | Number of sampled transactions with given length |
+
+**Note:** the length is marked -1 if the payment failed (there was no available path for routing)
+
+**Note:** the sum of transactions in the second column could be less then the predefined number of payments to simulate. The difference is the number of randomly sampled loop transactions with identical sender and recipient node.
+
+#### b.) router_incomes.csv
+
+Contains statistics on nodes that forwarded payments in the simulation. We refer to these nodes as **routers**.
+
+| Column | Description |
+|     :---      |   :---   |
+| node | LN node public key |
+| fee | routing income |
+| num_trans | number of routed transactions |
+
+#### c.) source_fees.csv
+
+Contains statistics on payment initiator nodes (senders).
+
+| Column | Description |
+|     :---      |   :---   |
+| source | LN node that initiated the payment (sender node) |
+| num_trans | the number of transactions initiated by this node in the simulation |
+| mean_fee | the mean transaction cost per payment |
+
+## Useful function calls
+
+There are alternative ways to interact with the simulator object beside exporting the results (with the `simulator.export(output_dir)` function). Please follow the examples below.
+
+#### Top nodes with highest daily income
 
 You can search for the identity of these nodes on [1ml.com](https://1ml.com).
 
-**In order to get stable daily LN node statistics, we recommend to run the simulator for multiple times over several consecutive snapshots!**
+```
+total_income.sort_values("fee", ascending=False).set_index("node").head(5)
+```
 
+#### Top nodes with highest daily traffic
+
+```
+total_income.sort_values("num_trans", ascending=False).set_index("node").head(5)
+```
+
+#### Payment path length distribution
+
+**Note:** the length is marked -1 if the payment failed (there was no available path for routing)
+
+```
+cheapest_paths["length"].value_counts()
+```
+
+#### Payment succes ratio
+
+```
+(cheapest_paths["length"] > -1).value_counts() / len(cheapest_paths)
+```
+
+#### Payment cost statistics
+
+```
+cheapest_paths["original_cost"].describe()
+```
+
+#### Most frequent payment receivers
+
+```
+simulator.transactions["target"].value_counts().head(5)
+```
+
+#### Number of unique payment senders and receivers
+
+```
+simulator.transactions["source"].nunique(), simulator.transactions["target"].nunique()
+```
