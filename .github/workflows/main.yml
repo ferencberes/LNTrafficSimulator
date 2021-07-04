@@ -1,0 +1,42 @@
+name: CI
+
+on:
+
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  schedule:
+  - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+    build:
+      runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os: [ubuntu-18.04, ubuntu-latest]
+          python-version: ['3.5', '3.6', '3.7', '3.8']
+      steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: which python
+      - name: Run installation.
+        run: |
+         pip install codecov
+         pip install .[test]
+         python setup.py install
+         bash ./scripts/download_data.sh
+        #- name: Test coverage.
+        #run: |
+        # python setup.py test
+        # codecov
+        #- name: Code Coverage
+        #uses: codecov/codecov-action@v1
+      - name: Run scripts
+        run: |
+         cd scripts
+         python run_simulator.py preprocessed 0 params.json PREPROC_OUT
+         python run_simulator.py raw ../ln_data/sample.json params.json JSON_OUT
