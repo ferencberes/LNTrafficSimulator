@@ -9,13 +9,13 @@ install_requires = [
     "tqdm",
 ]
 
-setup_requires = ['pytest-runner']
+#setup_requires = ['pytest-runner']
 
-tests_require = [
-    'pytest',
-    'pytest-cov',
-    'codecov'
-]
+#tests_require = [
+#    'pytest',
+#    'pytest-cov',
+#    'codecov'
+#]
 
 keywords = [
     "bitcoin",
@@ -40,8 +40,8 @@ setup(name='lnsimulator',
       author_email='fberes@info.ilab.sztaki.hu',
       packages = find_packages(),
       install_requires=install_requires,
-      setup_requires = setup_requires,
-      tests_require = tests_require,
+      #setup_requires = setup_requires,
+      #tests_require = tests_require,
       keywords = keywords,
       long_description=long_description,
       long_description_content_type='text/markdown',

@@ -25,8 +25,8 @@ jobs:
       - run: which python
       - name: Run installation.
         run: |
-         pip install codecov
-         pip install .[test]
+         #pip install codecov
+         #pip install .[test]
          python setup.py install
          bash ./scripts/download_data.sh
         #- name: Test coverage.
