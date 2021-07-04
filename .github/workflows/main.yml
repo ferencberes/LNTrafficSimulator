@@ -27,6 +27,7 @@ jobs:
         run: |
          #pip install codecov
          #pip install .[test]
+         pip install -U pip
          python setup.py install
          bash ./scripts/download_data.sh
         #- name: Test coverage.
