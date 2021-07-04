@@ -15,7 +15,7 @@ jobs:
       runs-on: ${{ matrix.os }}
       strategy:
         matrix:
-          os: [ubuntu-18.04, ubuntu-latest]
+          os: [ubuntu-18.04, ubuntu-latest, macos-latest]
           python-version: ['3.7', '3.8']
       steps:
       - uses: actions/checkout@v2
@@ -29,7 +29,12 @@ jobs:
          #pip install .[test]
          pip install -U pip
          python setup.py install
-         bash ./scripts/download_data.sh
+      - name: Download data (macOS)
+        run: sh ./scripts/download_data.sh 
+        if: matrix.os == 'macos-latest'
+      - name: Download data (macOS)
+        run: bash ./scripts/download_data.sh 
+        if: matrix.os == 'ubuntu-latest' or matrix.os == 'ubuntu-18.04'
         #- name: Test coverage.
         #run: |
         # python setup.py test
